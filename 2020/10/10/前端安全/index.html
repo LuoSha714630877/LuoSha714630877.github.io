@@ -1,0 +1,295 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>前端安全 | Coder_Luo</title><meta name="description" content="有哪些可能引起前端安全的问题？ 跨站脚本攻击（Cross-Site Scripting，XSS）：一种代码注入方式，为了与 CSS 区分所以被称为 XSS。早期常见于网络论坛，起因是网站没有对用户的输入进行严格的限制，使得攻击者可以将脚本上传到帖子让其他啊人在浏览到有恶意脚本的页面。其注入方式很简单，包括但不限于 JavaScript &#x2F; VBScript &#x2F; CSS &#x2F; Flash 等； ifr"><meta name="keywords" content="Javascript"><meta name="author" content="不想起床"><meta name="copyright" content="不想起床"><meta name="format-detection" content="telephone=no"><link rel="shortcut icon" href="/img/catfavicon.png"><link rel="canonical" href="http://luosha714630877.github.io/2020/10/10/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin="crossorigin"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta property="og:type" content="article"><meta property="og:title" content="前端安全"><meta property="og:url" content="http://luosha714630877.github.io/2020/10/10/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"><meta property="og:site_name" content="Coder_Luo"><meta property="og:description" content="有哪些可能引起前端安全的问题？ 跨站脚本攻击（Cross-Site Scripting，XSS）：一种代码注入方式，为了与 CSS 区分所以被称为 XSS。早期常见于网络论坛，起因是网站没有对用户的输入进行严格的限制，使得攻击者可以将脚本上传到帖子让其他啊人在浏览到有恶意脚本的页面。其注入方式很简单，包括但不限于 JavaScript &#x2F; VBScript &#x2F; CSS &#x2F; Flash 等； ifr"><meta property="og:image" content="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><meta property="article:published_time" content="2020-10-10T07:58:29.000Z"><meta property="article:modified_time" content="2020-10-10T07:58:54.687Z"><meta name="twitter:card" content="summary"><script>var activateDarkMode = function () {
+  document.documentElement.setAttribute('data-theme', 'dark')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000')
+  }
+}
+var activateLightMode = function () {
+  document.documentElement.setAttribute('data-theme', 'light')
+  if (document.querySelector('meta[name="theme-color"]') !== null) {
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#fff')
+  }
+}
+
+var getCookies = function (name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+}
+
+var autoChangeMode = 'false'
+var t = getCookies('theme')
+if (autoChangeMode === '1') {
+  var isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  var isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+  var isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+  var hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+  if (t === undefined) {
+    if (isLightMode) activateLightMode()
+    else if (isDarkMode) activateDarkMode()
+    else if (isNotSpecified || hasNoSupport) {
+      console.log('You specified no preference for a color scheme or your browser does not support it. I Schedule dark mode during night time.')
+      var now = new Date()
+      var hour = now.getHours()
+      var isNight = hour <= 6 || hour >= 18
+      isNight ? activateDarkMode() : activateLightMode()
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+      if (Cookies.get('theme') === undefined) {
+        e.matches ? activateDarkMode() : activateLightMode()
+      }
+    })
+  } else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else if (autoChangeMode === '2') {
+  now = new Date()
+  hour = now.getHours()
+  isNight = hour <= 6 || hour >= 18
+  if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+  else if (t === 'light') activateLightMode()
+  else activateDarkMode()
+} else {
+  if (t === 'dark') activateDarkMode()
+  else if (t === 'light') activateLightMode()
+}</script><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css"><link rel="next" title="原型_原型链" href="http://luosha714630877.github.io/2020/09/29/%E5%8E%9F%E5%9E%8B-%E5%8E%9F%E5%9E%8B%E9%93%BE/"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  bookmark: {
+    message_prev: '按',
+    message_next: '键将本页加入书签'
+  },
+  runtime_unit: '天',
+  runtime: false,
+  copyright: undefined,
+  ClickShowText: undefined,
+  medium_zoom: false,
+  fancybox: true,
+  Snackbar: undefined,
+  justifiedGallery: {
+    js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+    css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+  },
+  baiduPush: false,
+  highlightCopy: true,
+  highlightLang: true,
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false    
+}</script><script>var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isSidebar: true
+  }</script><noscript><style>
+#nav {
+  opacity: 1
+}
+.justified-gallery img{
+  opacity: 1
+}
+</style></noscript><meta name="generator" content="Hexo 4.2.1"></head><body><canvas class="fireworks"></canvas><div id="mobile-sidebar"><div id="menu_mask"></div><div id="mobile-sidebar-menus"><div class="mobile_author_icon"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="mobile_post_data"><div class="mobile_data_item is-center"><div class="mobile_data_link"><a href="/archives/"><div class="headline">文章</div><div class="length_num">7</div></a></div></div><div class="mobile_data_item is-center">      <div class="mobile_data_link"><a href="/tags/"><div class="headline">标签</div><div class="length_num">3</div></a></div></div><div class="mobile_data_item is-center">     <div class="mobile_data_link"><a href="/categories/"><div class="headline">分类</div><div class="length_num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><i class="fas fa-arrow-right on" id="toggle-sidebar"></i><div id="sidebar"><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#有哪些可能引起前端安全的问题？"><span class="toc-number">1.</span> <span class="toc-text">有哪些可能引起前端安全的问题？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#XSS-攻击（跨站脚本攻击）"><span class="toc-number">2.</span> <span class="toc-text">XSS 攻击（跨站脚本攻击）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS分类"><span class="toc-number">2.1.</span> <span class="toc-text">XSS分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#存储型XSS"><span class="toc-number">2.1.1.</span> <span class="toc-text">存储型XSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#反射型XSS"><span class="toc-number">2.1.2.</span> <span class="toc-text">反射型XSS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DOM型XSS"><span class="toc-number">2.1.3.</span> <span class="toc-text">DOM型XSS</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#XSS防御"><span class="toc-number">2.2.</span> <span class="toc-text">XSS防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#输入过滤"><span class="toc-number">2.2.1.</span> <span class="toc-text">输入过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#防止执行恶意代码"><span class="toc-number">2.2.2.</span> <span class="toc-text">防止执行恶意代码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#纯前端渲染"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">纯前端渲染</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#转义-HTML"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">转义 HTML</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#预防-DOM型-XSS-攻击"><span class="toc-number">2.2.3.</span> <span class="toc-text">预防 DOM型 XSS 攻击</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其它-XSS-防范措施"><span class="toc-number">2.2.4.</span> <span class="toc-text">其它 XSS 防范措施</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#内容安全策略（Content-Security-Policy，CSP）"><span class="toc-number">2.2.4.1.</span> <span class="toc-text">内容安全策略（Content Security Policy，CSP）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输入内容长度控制"><span class="toc-number">2.2.4.2.</span> <span class="toc-text">输入内容长度控制</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#HttpOnly"><span class="toc-number">2.2.4.3.</span> <span class="toc-text">HttpOnly</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CSRF攻击（跨站请求伪造）"><span class="toc-number">3.</span> <span class="toc-text">CSRF攻击（跨站请求伪造）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF分类"><span class="toc-number">3.1.</span> <span class="toc-text">CSRF分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GET-类型的-CSRF"><span class="toc-number">3.1.1.</span> <span class="toc-text">GET 类型的 CSRF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST-类型的-CSRF"><span class="toc-number">3.1.2.</span> <span class="toc-text">POST 类型的 CSRF</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#链接类型的-CSRF"><span class="toc-number">3.1.3.</span> <span class="toc-text">链接类型的 CSRF</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CSRF防御"><span class="toc-number">3.2.</span> <span class="toc-text">CSRF防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同源检测"><span class="toc-number">3.2.1.</span> <span class="toc-text">同源检测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CSRF-Token"><span class="toc-number">3.2.2.</span> <span class="toc-text">CSRF Token</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#双重-Cookie-验证"><span class="toc-number">3.2.3.</span> <span class="toc-text">双重 Cookie 验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Samesite-Cookie-属性"><span class="toc-number">3.2.4.</span> <span class="toc-text">Samesite Cookie 属性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#网络劫持"><span class="toc-number">4.</span> <span class="toc-text">网络劫持</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#网络劫持的分类"><span class="toc-number">4.1.</span> <span class="toc-text">网络劫持的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#网络劫持防御"><span class="toc-number">4.2.</span> <span class="toc-text">网络劫持防御</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#中间人攻击（Man-in-the-middle-attack，MITM）"><span class="toc-number">5.</span> <span class="toc-text">中间人攻击（Man-in-the-middle attack，MITM）</span></a></li></ol></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg)"><nav id="nav"><span class="pull-left" id="blog_name"><a class="blog_title" id="site-name" href="/">Coder_Luo</a></span><span class="pull-right menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page"><i class="fa-fw fas fa-list"></i><span> List</span><i class="fas fa-chevron-down menus-expand"></i></a><ul class="menus_item_child"><li><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></li><li><a class="site-page" href="/movies/"><i class="fa-fw fas fa-video"></i><span> Movie</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><span class="toggle-menu close"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></span></span></nav><div id="post-info"><div id="post-title"><div class="posttitle">前端安全</div></div><div id="post-meta"><div class="meta-firstline"><time class="post-meta__date"><span class="post-meta__date-created" title="发表于 2020-10-10 15:58:29"><i class="far fa-calendar-alt fa-fw"></i> 发表于 2020-10-10</span><span class="post-meta__separator">|</span><span class="post-meta__date-updated" title="更新于 2020-10-10 15:58:54"><i class="fas fa-history fa-fw"></i> 更新于 2020-10-10</span></time><span class="post-meta__categories"><span class="post-meta__separator">|</span><i class="fas fa-inbox fa-fw post-meta__icon"></i><a class="post-meta__categories" href="/categories/Javascript/">Javascript</a></span></div><div class="meta-secondline"> <span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta__icon"></i><span>字数总计:</span><span class="word-count">3.9k</span><span class="post-meta__separator">|</span><i class="far fa-clock fa-fw post-meta__icon"></i><span>阅读时长: 11 分钟</span></span></div><div class="meta-thirdline"><span class="post-meta-pv-cv"><span class="post-meta__separator">|</span><i class="far fa-eye fa-fw post-meta__icon"></i><span>阅读量:</span><span id="busuanzi_value_page_pv"></span></span><span class="post-meta-commentcount"></span></div></div></div></header><main class="layout_post" id="content-inner"><article id="post"><div class="post-content" id="article-container"><h1 id="有哪些可能引起前端安全的问题？"><a href="#有哪些可能引起前端安全的问题？" class="headerlink" title="有哪些可能引起前端安全的问题？"></a>有哪些可能引起前端安全的问题？</h1><ul>
+<li><strong>跨站脚本攻击（Cross-Site Scripting，XSS）</strong>：一种代码注入方式，为了与 CSS 区分所以被称为 XSS。早期常见于网络论坛，起因是网站没有对用户的输入进行严格的限制，使得攻击者可以将脚本上传到帖子让其他啊人在浏览到有恶意脚本的页面。其注入方式很简单，包括但不限于 JavaScript / VBScript / CSS / Flash 等；</li>
+<li><strong>iframe滥用</strong>：iframe 中的内容是由第三方来提供的，默认情况下它们不受我们控制，它们可以在 iframe 中运行 JavaScript 脚本、Flash 插件、弹出对话框等，这些可能会破坏前端用户的体验；</li>
+<li><strong>跨站请求伪造（Cross-Site Request Forgeries，CSRF）</strong>：指攻击者通过设置好的陷阱，强制对于完成认证的用户进行非预期的个人信息或设定信息等某些状态更新，属于被动攻击；</li>
+<li><strong>恶意第三方库</strong>：无论开发服务端还是客户端，绝大多数时候我们都在借助开发框架和各种第三方工具库进行快速开发，一旦第三方库被植入恶意代码人容易引起安全问题。</li>
+</ul>
+<h1 id="XSS-攻击（跨站脚本攻击）"><a href="#XSS-攻击（跨站脚本攻击）" class="headerlink" title="XSS 攻击（跨站脚本攻击）"></a>XSS 攻击（跨站脚本攻击）</h1><blockquote>
+<p>  英文全称：Cross Site Script，XSS 攻击，通常指黑客通过 HTML 注入篡改了网页，插入恶意脚本，从而在用户浏览网页时，控制用户浏览器的一种行为</p>
+</blockquote>
+<h2 id="XSS分类"><a href="#XSS分类" class="headerlink" title="XSS分类"></a>XSS分类</h2><p>根据攻击的来源，XSS 攻击可分为存储型、反射型和 DOM型三种。</p>
+<ul>
+<li>存储区：恶意代码存放的位置；</li>
+<li>插入点：由谁取得恶意代码，并插入到网站。</li>
+</ul>
+<h3 id="存储型XSS"><a href="#存储型XSS" class="headerlink" title="存储型XSS"></a>存储型XSS</h3><blockquote>
+<p>  原理：一般是攻击者输入的恶意代码存储在服务端，主要是将 XSS 代码发送到服务器（不管是数据库、内存还是文件系统），只要受害者浏览包含次恶意代码的网页就会执行恶意代码</p>
+</blockquote>
+<p>存储型攻击步骤：</p>
+<ol>
+<li>攻击者将恶意代码提交到目标服务器中；</li>
+<li>用户打开目标网站时，网站服务器取出包含恶意代码的数据，拼接在 HTML 中返回给浏览器；</li>
+<li>用户浏览器接收到相应后解析执行，混在其中的恶意代码也被执行；</li>
+<li>恶意代码窃取用户数据并发送到攻击者网站；或冒充用户的行为，调用目标网站接口执行攻击者指定的操作。</li>
+</ol>
+<p>这种攻击常见于带有用户保存数据的网站，比如论坛发帖、商品评论、用户私信等。</p>
+<h3 id="反射型XSS"><a href="#反射型XSS" class="headerlink" title="反射型XSS"></a>反射型XSS</h3><blockquote>
+<p>  原理：反射型 XSS，也叫非持久型 XSS，是指发生请求时，XSS 代码出现在请求 URL 中，作为参数提交到服务器中，服务器解析并响应。响应结果中包含 XSS 代码，最后浏览器解析并执行</p>
+</blockquote>
+<p>反射型攻击步骤：</p>
+<ol>
+<li>攻击者构造出特殊的 URL，其中包含恶意代码；</li>
+<li>用户打开带有恶意代码的 URL 时，网站服务端将恶意代码从 URL 中取出，拼接在 HTML 中返回给浏览器；</li>
+<li>用户浏览器接收到响应后解析执行，混在其中的恶意代码也被执行；</li>
+<li>恶意代码窃取用户数据并发送到攻击者网站；或冒充用户的行为，调用目标网站接口执行攻击者指定的操作。</li>
+</ol>
+<p>反射型 XSS 漏洞常见于通过 URL 传参的功能，比如网站搜索、跳转等。</p>
+<p>由于需要用户主动打开恶意的 URL 才能生效，因此攻击者往往会结合多种手段诱导用户点击。</p>
+<h3 id="DOM型XSS"><a href="#DOM型XSS" class="headerlink" title="DOM型XSS"></a>DOM型XSS</h3><blockquote>
+<p>  原理：同以上反射型XSS 攻击一样。</p>
+</blockquote>
+<p>DOM型攻击步骤：</p>
+<ol>
+<li>攻击者构造出特殊的 URL，其中包含恶意代码；</li>
+<li>用户打开带有恶意代码的 URL；</li>
+<li>用户浏览器接收到相应后解析执行，前端 js 取出 URL 中的恶意代码并执行；</li>
+<li>恶意代码窃取用户数据并发送到攻击者网站；或冒充用户的行为，调用目标网站接口执行攻击者指定的操作。</li>
+</ol>
+<p>DOM型XSS 和前两种 XSS 的区别：DOM型取出和执行恶意代码由浏览器完成，属于前端自身的安全漏洞；而其他两种则属于服务端的安全漏洞。</p>
+<h2 id="XSS防御"><a href="#XSS防御" class="headerlink" title="XSS防御"></a>XSS防御</h2><p>XSS 攻击有两大要素：</p>
+<ul>
+<li>攻击者提交恶意代码；</li>
+<li>浏览器执行恶意代码。</li>
+</ul>
+<h3 id="输入过滤"><a href="#输入过滤" class="headerlink" title="输入过滤"></a>输入过滤</h3><p>在用户提交时，由前端过滤输入，然后提交到后端，是否可行？</p>
+<p>答案是 <strong>不可行</strong>。一旦攻击者绕过前端过滤，直接构造请求，这样就可以提交恶意代码了。</p>
+<p>那换一个过滤时机：后端在写入数据库前进行过滤，然后把 <em>安全的</em> 内容返回给前端，是否可行？</p>
+<p>答案是 <strong>不可行</strong>。因为，在写入数据库前进行输入过滤虽然可以过滤掉一部分内容，但是用户的使用场景是很复杂的，我们很难判断出内容会输出到哪里，一旦用户输入的内容经过了转码，客户端就需要进行反转码，而前端不同的位置所需要的编码也是不同的。因此输入侧过滤虽然能够在某些情况下解决 XSS 问题，但是会引入很大的不确定性和乱码问题，所以应当尽量避免使用这种方法。</p>
+<p>当然，对于明确的输入类型，例如数字、URL、电话号码、邮件地址等内容，进行输入过滤还是必要的。</p>
+<h3 id="防止执行恶意代码"><a href="#防止执行恶意代码" class="headerlink" title="防止执行恶意代码"></a>防止执行恶意代码</h3><p>存储型和反射型XSS 都是在服务端取出恶意代码后，插入到响应 HTML 中，攻击者可以编写的 <em>数据</em> 被内嵌到 <em>代码</em> 中，被浏览器执行。</p>
+<p>预防这两种漏洞，有两种常见的做法：</p>
+<ul>
+<li>改成纯前端渲染，把代码和数据分隔开；</li>
+<li>对 HTML 做充分转义。</li>
+</ul>
+<h4 id="纯前端渲染"><a href="#纯前端渲染" class="headerlink" title="纯前端渲染"></a>纯前端渲染</h4><p>目前主流框架采用的 SPA 的方式，我们会明确告诉浏览器：下面要设置的内容是文本（<code>.innerText</code>），还是属性（<code>.setAttribute</code>），还是样式（<code>.style</code>）等等。浏览器不会轻易被欺骗，执行与其外的代码。</p>
+<p>但纯前端渲染仍需要避免 DOM型 XSS攻击。</p>
+<p>在很多内部、管理系统中，纯前端渲染是非常合适的，但对于高性能要求，或者是有 seo 需求的页面，我们仍然要面对拼接 HTML 的问题。</p>
+<h4 id="转义-HTML"><a href="#转义-HTML" class="headerlink" title="转义 HTML"></a>转义 HTML</h4><p>如果拼接 HTML 是必要的，就需要采用合适的转义库对 HTML 模版的各处插入点进行充分的转义。</p>
+<p>常见的模版引擎有 ejs 等，对于 HTML 转义通常只有一个规则，就是把 <code>&amp; &lt; &gt; &quot; &#39; /</code> 这几个字符转义掉。当然这确实可以起到一定的防护作用，但还不够完善。</p>
+<h3 id="预防-DOM型-XSS-攻击"><a href="#预防-DOM型-XSS-攻击" class="headerlink" title="预防 DOM型 XSS 攻击"></a>预防 DOM型 XSS 攻击</h3><p>在使用 <code>.innerHTML</code>、<code>.outerHTML</code>、<code>document.write()</code> 是要特别小心，不要把不可信的数据作为 HTML 插入到网页，尽量使用 <code>.textContent</code>、<code>.setAttribute()</code> 等。</p>
+<p>如果是使用 Vue / React 时，不要使用 <code>v-html</code> / <code>dangerouslySetInnerHTML</code> ，在前端避免 innerHTML、outerHTML 的 XSS 隐患。</p>
+<p>另外，DOM 中的内联事件监听器，如 <code>location</code>、<code>onclick</code>、<code>onerror</code>、<code>onload</code>，<code>&lt;a&gt;</code> 标签的 href 属性，JavaScript 的 <code>eval()</code>、<code>setTimeout()</code>、<code>setInterval()</code> 等都能把字符串作为代码运行，如果不可信的数据拼接到字符串中传递给这些 API，很容易产生安全隐患，务必谨慎使用。</p>
+<h3 id="其它-XSS-防范措施"><a href="#其它-XSS-防范措施" class="headerlink" title="其它 XSS 防范措施"></a>其它 XSS 防范措施</h3><p>虽然在渲染页面和执行 JavaScript 时，通过谨慎的转义可以防止 XSS 的发生，但完全依靠开发的谨慎仍然是不够的。</p>
+<p>以下介绍一些通用的方案，可以降低 XSS 带来的风险和后果。</p>
+<h4 id="内容安全策略（Content-Security-Policy，CSP）"><a href="#内容安全策略（Content-Security-Policy，CSP）" class="headerlink" title="内容安全策略（Content Security Policy，CSP）"></a>内容安全策略（Content Security Policy，CSP）</h4><p>严格的 CSP 在 XSS 的防范中可以起到以下的作用：</p>
+<ul>
+<li>禁止加载外域代码，防止复杂的攻击逻辑；</li>
+<li>禁止外域提交，网站被攻击后，用户的数据不会泄漏到外域；</li>
+<li>禁止内联脚本执行；</li>
+<li>禁止未授权的脚本执行；</li>
+<li>合理使用上报可以及时发现 XSS，利于尽快修复问题。</li>
+</ul>
+<p>可以使用以下两种方式开启内容安全策略：</p>
+<ul>
+<li>HTTP Header 中的 <code>Content-Security-Policy</code></li>
+<li><code>&lt;meta http-equiv=&quot;Content-Security-Policy&quot;&gt;</code></li>
+</ul>
+<h4 id="输入内容长度控制"><a href="#输入内容长度控制" class="headerlink" title="输入内容长度控制"></a>输入内容长度控制</h4><p>对于不受信任的输入，都应该先定一个合理的长度。虽然无法完全防止 XSS 的发生，但是可以增加 XSS 攻击的难度。</p>
+<h4 id="HttpOnly"><a href="#HttpOnly" class="headerlink" title="HttpOnly"></a>HttpOnly</h4><p>对敏感的 cookie 设置 HttpOnly，禁止 JavaScript 访问这些信息，攻击者在完成 XSS 攻击后也无法窃取敏感信息。</p>
+<h1 id="CSRF攻击（跨站请求伪造）"><a href="#CSRF攻击（跨站请求伪造）" class="headerlink" title="CSRF攻击（跨站请求伪造）"></a>CSRF攻击（跨站请求伪造）</h1><blockquote>
+<p>  CSRF（Cross-site request forgery）跨站请求伪造：攻击者又到受害者进入第三方网站，在第三方网站中向被攻击网站发送跨站请求。利用受害者在被攻击网站已经获取的注册凭证，绕过后台的用户验证，达到冒充用户对被攻击的网站执行某项操作的目的。</p>
+</blockquote>
+<p>一个典型的 CSRF攻击流程如下：</p>
+<ol>
+<li>受害者登录网站A，保留了登录凭证（cookie）；</li>
+<li>攻击者诱导受害者访问危险网站B；</li>
+<li>危险网站B向网站A发送一个正常的请求，浏览器会默认携带存放在网站A下的 cookie；</li>
+<li>网站A在接收到请求后，对请求进行验证，确认是受害者的凭证，误以为是受害者自己发送的请求；</li>
+<li>网站A以受害者的名义，执行了危险请求中请求的操作；</li>
+</ol>
+<h2 id="CSRF分类"><a href="#CSRF分类" class="headerlink" title="CSRF分类"></a>CSRF分类</h2><h3 id="GET-类型的-CSRF"><a href="#GET-类型的-CSRF" class="headerlink" title="GET 类型的 CSRF"></a>GET 类型的 CSRF</h3><p>GET 类型的 CSRF 实现方式非常简单，只需要一个普通的 HTTP 请求，一般会放在图片等资源里面，受害者在打开危险网站后，危险网站的图片加载就发出了一个危险的 GET 请求，这样就完成了一个 GET 类型的 CSRF 攻击。</p>
+<h3 id="POST-类型的-CSRF"><a href="#POST-类型的-CSRF" class="headerlink" title="POST 类型的 CSRF"></a>POST 类型的 CSRF</h3><p>这种方式通常会使用一个自动提交的表单。当访问该页面时，表单会自动提交，相当于模拟用户完成了一个 POST 操作。</p>
+<p>POST 类型的攻击通常会比 GET 类型的更加严格一点，但仍并不复杂，所以后端的接口并不能将安全寄托在仅允许 POST 上面。</p>
+<h3 id="链接类型的-CSRF"><a href="#链接类型的-CSRF" class="headerlink" title="链接类型的 CSRF"></a>链接类型的 CSRF</h3><p>这种方式并不常见，实现思路和 GET 类型一致，但是需要用户手动点击才能触发，因此攻击者通常会以广告的形式诱导用户中招。</p>
+<h2 id="CSRF防御"><a href="#CSRF防御" class="headerlink" title="CSRF防御"></a>CSRF防御</h2><p>CSRF攻击通常发生在第三方网站，被攻击的网站无法防止攻击发生，只能提高自己的安全性。</p>
+<p>CSRF的两个特点：</p>
+<ul>
+<li>发生在第三方域名；</li>
+<li>攻击者不能获取 cookie 信息，只能使用。</li>
+</ul>
+<p>针对这两点，我们可以专门指定防护策略：</p>
+<ul>
+<li>阻止部名外域的访问<ul>
+<li>同源检测</li>
+<li>Samesite Cookie</li>
+</ul>
+</li>
+<li>提交时要求附加本域才能获取的信息<ul>
+<li>Token</li>
+<li>双重 Cookie 验证</li>
+</ul>
+</li>
+</ul>
+<h3 id="同源检测"><a href="#同源检测" class="headerlink" title="同源检测"></a>同源检测</h3><p>既然大多数 CSRF 都发生在第三方网站，那么我们就直接禁止外域对我们发起的请求：</p>
+<ul>
+<li>使用 Origin Header 确定来源域名：在部分与 CSRF 相关的请求中，请求头不会携带 Origin 字段，如果 Origin 字段存在则可以使用它来确定来源域名；</li>
+<li>使用 Referer Header 来确定来源域名：根据 HTTP 协议，在请求的头部会有一个 Referer 字段，记录了请求的来源地址。</li>
+</ul>
+<h3 id="CSRF-Token"><a href="#CSRF-Token" class="headerlink" title="CSRF Token"></a>CSRF Token</h3><p>CSRF 的另一个特征是攻击者无法直接窃取用户的信息，仅仅是冒用而已。</p>
+<p>而 CSRF 之所以能成功，是因为服务器误把攻击者发送的请求当成用户自己的请求。那么我们可以要求所有的用户请求都携带一个 CSRF 无法获取到的 Token，服务器判断 Token 是否正确，从而将正常的请求和攻击的请求区分开。</p>
+<p>防护策略分为三个步骤：</p>
+<ol>
+<li>将 CSRF Token 输出到页面；</li>
+<li>页面提交的请求携带这个 Token；</li>
+<li>服务器验证 Token 是否正确。</li>
+</ol>
+<h3 id="双重-Cookie-验证"><a href="#双重-Cookie-验证" class="headerlink" title="双重 Cookie 验证"></a>双重 Cookie 验证</h3><p>原理和 Token 相似，在请求接口时，在请求参数中附带上对应的 cookie，服务端在接收到请求时对参数中的 cookie 和 cookie 中的值进行对比判断是否为攻击请求。</p>
+<h3 id="Samesite-Cookie-属性"><a href="#Samesite-Cookie-属性" class="headerlink" title="Samesite Cookie 属性"></a>Samesite Cookie 属性</h3><p>Google起草了一份草案来改进HTTP协议，那就是为Set-Cookie响应头新增Samesite属性，它用来标明这个 Cookie是个“同站 Cookie”，同站Cookie只能作为第一方Cookie，不能作为第三方Cookie，Samesite 有两个属性值:</p>
+<ul>
+<li>Samesite=Strict: 这种称为严格模式，表明这个 Cookie 在任何情况下都不可能作为第三方 Cookie</li>
+<li>Samesite=Lax: 这种称为宽松模式，比 Strict 放宽了点限制,假如这个请求是这种请求且同时是个GET请求，则这个Cookie可以作为第三方Cookie</li>
+</ul>
+<h1 id="网络劫持"><a href="#网络劫持" class="headerlink" title="网络劫持"></a>网络劫持</h1><h2 id="网络劫持的分类"><a href="#网络劫持的分类" class="headerlink" title="网络劫持的分类"></a>网络劫持的分类</h2><ul>
+<li>DNS劫持：输入京东被强制跳转到淘宝就属于 DNS劫持。<ul>
+<li>DNS强制解析：通过修改运营商本地 DNS 记录，来引导用户流量到缓存服务器；</li>
+<li>302 跳转：通过监控网络出口的流量，分析判断哪些内容是可以进行劫持处理，在对劫持的内存发起 302 跳转的回复，引导用户获取内容。</li>
+</ul>
+</li>
+<li>HTTP劫持：例如访问百度，但是一直有贪玩蓝月的广告。由于 HTTP 是明文传输，运营商会修改你的 HTTP 响应内容（即加广告）。</li>
+</ul>
+<h2 id="网络劫持防御"><a href="#网络劫持防御" class="headerlink" title="网络劫持防御"></a>网络劫持防御</h2><p>DNS劫持由于涉嫌违法，已经被监管起来，现在很少会遇到 DNS 劫持。</p>
+<p>但是 HTTP 劫持依然非常盛行，最有效的方法就是使用 HTTPS，将 HTTP 加密起来，运营商无法获取明文，就无法劫持你的响应内容。</p>
+<h1 id="中间人攻击（Man-in-the-middle-attack，MITM）"><a href="#中间人攻击（Man-in-the-middle-attack，MITM）" class="headerlink" title="中间人攻击（Man-in-the-middle attack，MITM）"></a>中间人攻击（Man-in-the-middle attack，MITM）</h1><p>中间人是指攻击者与通讯两端分别创建独立的联系，并交换其所收到的数据，使通讯的两端都认为他们正在一个私密的连接与对方直接对话，但实际上整个会话都被攻击者完全控制。在中间人攻击中，攻击者可以拦截通讯双方的通话，并插入新的内容。</p>
+<p>一般流程如下：</p>
+<ul>
+<li>服务端请求客户端，请求被中间人拦截；</li>
+<li>服务器向客户端发送公钥；</li>
+<li>中间人截取公钥，保留在自己手上，并伪造一个公钥发送给客户端；</li>
+<li>客户端收到伪造的公钥后，生成加密密钥发送给服务端；</li>
+<li>中间人通过私钥解密得到真密钥，同时生成假的密钥，用服务端的公钥加密后发送给服务端；</li>
+<li>服务端收到请求后用私钥解密得到假的密钥，然后用假的密钥加密明文数据传输给客户端。</li>
+</ul>
+</div><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">不想起床</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="http://luosha714630877.github.io/2020/10/10/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/">http://luosha714630877.github.io/2020/10/10/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://luosha714630877.github.io" target="_blank">Coder_Luo</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Javascript/">Javascript</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"/><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js"></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2020/09/29/%E5%8E%9F%E5%9E%8B-%E5%8E%9F%E5%9E%8B%E9%93%BE/"><img class="next-cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg" onerror="onerror=null;src='/img/404.jpg'"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">原型_原型链</div></div></a></div></nav><div class="relatedPosts"><div class="relatedPosts_headline"><i class="fas fa-thumbs-up fa-fw"></i><span> 相关推荐</span></div><div class="relatedPosts_list"><div class="relatedPosts_item"><a href="/2020/09/04/JavaScript中的Event-Loop（事件循环）机制/" title="JavaScript中的Event Loop（事件循环）机制"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-04</div><div class="relatedPosts_title">JavaScript中的Event Loop（事件循环）机制</div></div></a></div><div class="relatedPosts_item"><a href="/2020/09/29/原型-原型链/" title="原型_原型链"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-09-29</div><div class="relatedPosts_title">原型_原型链</div></div></a></div><div class="relatedPosts_item"><a href="/2020/07/27/数据结构/" title="数据结构"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-27</div><div class="relatedPosts_title">数据结构</div></div></a></div><div class="relatedPosts_item"><a href="/2020/07/24/数组与类数组的区别/" title="数组与类数组的区别"><img class="relatedPosts_cover" data-src="https://i.loli.net/2020/05/01/gkihqEjXxJ5UZ1C.jpg"><div class="relatedPosts_main is-center"><div class="relatedPosts_date"><i class="far fa-calendar-alt fa-fw"></i> 2020-07-24</div><div class="relatedPosts_title">数组与类数组的区别</div></div></a></div></div></div></article></main><footer id="footer" data-type="color"><div id="footer-wrap"><div class="copyright">&copy;2020 By 不想起床</div><div class="framework-info"><span>驱动 </span><a href="https://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 </span><a href="https://github.com/jerryc127/hexo-theme-butterfly" target="_blank" rel="noopener"><span>Butterfly</span></a></div></div></footer></div><section class="rightside" id="rightside"><div id="rightside-config-hide"><button id="readmode" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="font_plus" title="放大字体"><i class="fas fa-plus"></i></button><button id="font_minus" title="缩小字体"><i class="fas fa-minus"></i></button><button class="translate_chn_to_cht" id="translateLink" title="简繁转换">繁</button><button id="darkmode" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button></div><div id="rightside-config-show"><button id="rightside_config" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" title="目录"><i class="fas fa-list-ul"></i></button><button id="chat_btn" title="rightside.chat_btn"><i class="fas fa-sms"></i></button><button id="go-up" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></section><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="/js/third-party/fireworks.js"></script><script src="/js/third-party/activate-power-mode.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+document.body.addEventListener('input', POWERMODE);
+</script><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module" defer></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js" async></script><script>(function(i,s,o,g,r,a,m){i["DaoVoiceObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;a.charset="utf-8";m.parentNode.insertBefore(a,m)})(window,document,"script",('https:' == document.location.protocol ? 'https:' : 'http:') + "//widget.daovoice.io/widget/af218a32.js","daovoice")
+</script><script>var isChatBtn = true
+daovoice('init', {
+  app_id: 'af218a32',},{
+  launcher: { 
+     disableLauncherIcon: isChatBtn // 悬浮 ICON 是否显示
+  },
+});
+daovoice('update');
+
+if (isChatBtn) {
+  var chatBtn = document.getElementById("chat_btn")
+  chatBtn.addEventListener("click", function(){
+    daovoice('show')
+  });
+} else {
+  if (true) {
+    function chatBtnHide () {
+      daovoice('update', {},{
+        launcher: { 
+        disableLauncherIcon: true // 悬浮 ICON 是否显示
+        },
+      });
+    }
+    function chatBtnShow () {
+      daovoice('update', {},{
+        launcher: { 
+        disableLauncherIcon: false // 悬浮 ICON 是否显示
+        },
+      });
+    }
+  }
+}</script></body></html>
